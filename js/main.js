@@ -19,6 +19,16 @@ async function getMovies(url) {
   showMovies(respData);
 }
 
+function getClassByRate(vote) {
+  if (vote >= 7) {
+    return "green";
+  } else if (vote > 5) {
+    return "orange";
+  } else {
+    return "red";
+  }
+}
+
 function showMovies(data) {
   const moviesEl = document.querySelector(".movie__cards");
   document.querySelector(".movie__cards").innerHTML = "";
@@ -54,6 +64,9 @@ function showMovies(data) {
             <div class="movie__category">${movie.genres.map(
               (genre) => ` ${genre.genre}`
             )}</div>
+            <div class="movie__average movie__average-${getClassByRate(movie.rating)}">${
+              movie.rating
+            }</div>
           </div>`;
       moviesEl.appendChild(movieEl);
     });
