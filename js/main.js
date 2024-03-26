@@ -10,7 +10,7 @@ const API_URL_TOP_BESTS =
 const TOP_EXPECTED =
   "https://kinopoiskapiunofficial.tech/api/v2.2/films/top?type=TOP_AWAIT_FILMS";
 
-  getMovies(API_URL_PREMIERS);
+getMovies(API_URL_PREMIERS);
 
 async function getMovies(url) {
   try {
@@ -73,12 +73,13 @@ function showMovies(data) {
 
   if (data.items) {
     displayHTML(data.items);
-  } else if{
+  } else if (data.films) {
     displayHTML(data.films);
-  } else if{
+  } else if (data.releases) {
     displayHTML(data.releases);
-  } else {alert("No movies found")
-    }
+  } else {
+    alert("No movies found");
+  }
 }
 
 const form = document.querySelector("form");
