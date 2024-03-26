@@ -3,6 +3,7 @@ body {
   color: #fff;
   font-family: "Open Sans ", sans-serif;
   font-size: 1rem;
+  line-height: 1rem;
   line-height: 0.8rem;
   margin: 0;
   padding: 0;
@@ -62,7 +63,6 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #15183a;
   border-radius: 0.5rem;
   position: relative;
 }
@@ -71,15 +71,14 @@ header {
   width: 16rem;
   height: 24rem;
   margin-top: 2rem;
+  margin-bottom: 1rem;
   cursor: pointer;
 }
 
-.movie__card__info {
-  width: 16rem;
+.movie__title{
+  margin-bottom: 0.5rem;
 }
 
-.movie__title {
-}
 .movie__category {
   font-size: 0.875rem;
 }

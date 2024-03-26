@@ -5,18 +5,25 @@ const API_URL_PREMIERS =
 const API_URL_SEARCH =
   "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword=";
 
+const API_URL_RELEASES =
+  "https://kinopoiskapiunofficial.tech/api/v2.1/films/releases?year=2000&month=JANUARY";
+
 getMovies(API_URL_PREMIERS);
 
 async function getMovies(url) {
-  const resp = await fetch(url, {
-    headers: {
-      "Content-Type": "application/json",
-      "X-API-KEY": API_KEY,
-    },
-  });
-  const respData = await resp.json();
-  console.log(respData);
-  showMovies(respData);
+  try {
+    const resp = await fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-KEY": API_KEY,
+      },
+    });
+    const respData = await resp.json();
+    console.log(respData);
+    showMovies(respData);
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+  }
 }
 
 function getClassByRate(vote) {
@@ -33,8 +40,8 @@ function showMovies(data) {
   const moviesEl = document.querySelector(".movie__cards");
   document.querySelector(".movie__cards").innerHTML = "";
 
-  if (data.items) {
-    data.items.forEach((movie) => {
+  function displayHTML(movies) {
+    movies.forEach((movie) => {
       const movieEl = document.createElement("div");
       movieEl.classList.add("movie__card");
       movieEl.innerHTML = `
@@ -42,34 +49,24 @@ function showMovies(data) {
                 alt="${movie.nameEn || movie.nameRu}"
                 class="movie__img
             />
-            <div class="movie__card__info">
+            
               <div class="movie__title">${movie.nameEn || movie.nameRu}</div>
               <div class="movie__category">${movie.genres.map(
                 (genre) => ` ${genre.genre}`
               )}</div>
-            </div>`;
+              <div class="movie__average movie__average-${getClassByRate(
+                movie.rating
+              )}">${movie.rating}</div>
+            
+            `;
       moviesEl.appendChild(movieEl);
     });
+  }
+
+  if (data.items) {
+    displayHTML(data.items);
   } else {
-    data.films.forEach((movie) => {
-      const movieEl = document.createElement("div");
-      movieEl.classList.add("movie__card");
-      movieEl.innerHTML = `
-          <img src="${movie.posterUrlPreview}"
-              alt="${movie.nameEn || movie.nameRu}"
-              class="movie__img
-          />
-          <div class="movie__card__info">
-            <div class="movie__title">${movie.nameEn || movie.nameRu}</div>
-            <div class="movie__category">${movie.genres.map(
-              (genre) => ` ${genre.genre}`
-            )}</div>
-            <div class="movie__average movie__average-${getClassByRate(movie.rating)}">${
-              movie.rating
-            }</div>
-          </div>`;
-      moviesEl.appendChild(movieEl);
-    });
+    displayHTML(data.films);
   }
 }
 
@@ -87,3 +84,9 @@ form.addEventListener("submit", (e) => {
     alert("Please enter a movie name");
   }
 });
+
+const releases = document.getElementById("releases");
+const premiers = document.getElementById("premiers");
+const top_expected = document.getElementById("top_expected");
+const top_best = document.getElementById("top_best");
+const favorites = document.getElementById("favorites");
