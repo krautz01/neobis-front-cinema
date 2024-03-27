@@ -46,6 +46,7 @@ function showMovies(data) {
     movies.forEach((movie) => {
       const movieEl = document.createElement("div");
       movieEl.classList.add("movie__card");
+      movieEl.setAttribute("id", movie.filmId || movie.kinopoiskId);
       movieEl.innerHTML = `
             <img src="${movie.posterUrlPreview}"
                 alt="${movie.nameEn || movie.nameRu}"
@@ -63,9 +64,9 @@ function showMovies(data) {
                 >
                   ${movie.rating}
                 </div>` || ""
-              }
-              <img src="./images/favorite_heart.svg" alt="favorite" class="material-symbols-outlined"/>
-            
+              }<button id="favoritesButton" onClick="addToFavorites(${
+        movie.filmId || movie.kinopoiskId
+      })">
             `;
       moviesEl.appendChild(movieEl);
     });
@@ -118,3 +119,40 @@ top_best.addEventListener("click", () => {
 });
 
 const favorites = document.getElementById("favorites");
+favorites.addEventListener("click", () => {
+  getFavorites();
+});
+
+function getFavorites() {
+  const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  const moviesEl = "";
+  if (favorites) {
+    favorites.forEach((id) => {});
+  } else {
+  }
+}
+
+const favoritesButton = document.getElementById("favoritesButton");
+function addToFavorites(movie) {
+  let favorites = JSON.parse(localStorage.getItem("favorites"));
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  alert("Movie added to favorites");
+  if (favorites) {
+    addToLocalStorage(favorites);
+  } else {
+    addToLocalStorage([]);
+  }
+}
+
+function addToLocalStorage(favorites, id) {
+  //favorite = document.getElementById(id);
+  if (favorites.includes(id)) {
+    favorites.splice(favorites.indexOf(id), 1);
+    //
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    console.log(first);
+  } else {
+    favorites.push(id);
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }
+}

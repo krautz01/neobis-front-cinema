@@ -10,20 +10,6 @@ body {
   box-sizing: border-box;
 }
 
-input[type="radio"] {
-  display: none; /* Скрыть стандартную радио-кнопку */
-}
-label {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: url("/images/favorite_heart.svg") no-repeat center; /* Замените на путь к вашей иконке сердца */
-  cursor: pointer;
-}
-input[type="radio"]:checked + label {
-  background-color: red; /* Измените цвет при выборе */
-}
-
 /* header start */
 header {
   margin: 0 auto;
