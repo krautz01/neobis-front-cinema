@@ -40,47 +40,55 @@ function getClassByRate(vote) {
 
 function showMovies(data) {
   const moviesEl = document.querySelector(".movie__cards");
-  document.querySelector(".movie__cards").innerHTML = "";
+  moviesEl.innerHTML = "";
+  const favoriteMovies =
+  JSON.parse(localStorage.getItem("favoriteMovies")) || [];
+  const movies = data.items || data.films || data.releases || "No movies found";
 
-  function displayHTML(movies) {
-    movies.forEach((movie) => {
-      const movieEl = document.createElement("div");
-      movieEl.classList.add("movie__card");
-      movieEl.setAttribute("id", movie.filmId || movie.kinopoiskId);
-      movieEl.innerHTML = `
+  movies.forEach((movie) => {
+    const isFavorite = favoriteMovies.some(
+      (favoriteMovie) => favoriteMovie.kinopoiskId === favoriteMovie.kinopoiskId
+    );
+    const movieEl = document.createElement("div");
+    movieEl.classList.add("movie__card");
+    movieEl.setAttribute("id", movie.filmId || movie.kinopoiskId);
+    movieEl.innerHTML = `
             <img src="${movie.posterUrlPreview}"
                 alt="${movie.nameEn || movie.nameRu}"
+            
                 class="movie__img
             />
-              <div class="movie__title">${movie.nameEn || movie.nameRu}</div>
-              <div class="movie__category">${movie.genres.map(
-                (genre) => ` ${genre.genre}`
-              )}</div>
-              ${
-                `<div
-                  class="movie__average movie__average-${getClassByRate(
-                    movie.rating
-                  )}"
+            <div class="movie__title">${movie.nameEn || movie.nameRu}</div>
+            <div class="movie__category">${movie.genres.map(
+              (genre) => ` ${genre.genre}`
+            )}</div>
+                ${
+                  `<div
+                    class="movie__average movie__average-${getClassByRate(
+                      movie.rating
+                    )}"
                 >
-                  ${movie.rating}
+                ${movie.rating}
                 </div>` || ""
-              }<button id="favoritesButton" onClick="addToFavorites(${
-        movie.filmId || movie.kinopoiskId
-      })">
+                }
+                <div class="favorite-btn">
+                <button id="favoriteButton" class="${
+                  isFavorite ? "favbtn-red" : "favbtn-green"
+                }">addToFavorites</button>
+                </div>
             `;
-      moviesEl.appendChild(movieEl);
-    });
-  }
+    moviesEl.appendChild(movieEl);
 
-  if (data.items) {
-    displayHTML(data.items);
-  } else if (data.films) {
-    displayHTML(data.films);
-  } else if (data.releases) {
-    displayHTML(data.releases);
-  } else {
-    alert("No movies found");
-  }
+    const favoriteButton = movieEl.querySelector(".favorite-btn");
+    favoriteButton.addEventListener("click", (e) => {
+      if (isFavorite) {
+        removeFavorite(movie.filmId || movie.kinopoiskId);
+      } else {
+        toggleFavorite(movie);
+      }
+      showMovies(data);
+    });
+  });
 }
 
 const form = document.querySelector("form");
@@ -118,41 +126,48 @@ top_best.addEventListener("click", () => {
   getMovies(API_URL_TOP_BESTS);
 });
 
-const favorites = document.getElementById("favorites");
-favorites.addEventListener("click", () => {
-  getFavorites();
+const favoritesPageLink = document.getElementById("favorites");
+favoritesPageLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  const favoriteMovies =
+    JSON.parse(localStorage.getItem("favoriteMovies")) || [];
+  if (favoriteMovies.length > 0) {
+    showMovies({ films: favoriteMovies });
+  } else {
+    alert("No favorite movies found");
+  }
 });
 
-function getFavorites() {
-  const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-  const moviesEl = "";
-  if (favorites) {
-    favorites.forEach((id) => {});
+const toggleFavorite = (movie) => {
+  const favoriteMovies =
+    JSON.parse(localStorage.getItem("favoriteMovies")) || [];
+  const movieIndex = favoriteMovies.findIndex(
+    (favoriteMovie) =>
+      favoriteMovie.kinopoiskId === movie.kinopoiskId ||
+      favoriteMovie.filmId === movie.filmId
+  );
+
+  if (movieIndex === -1) {
+    favoriteMovies.push(movie);
   } else {
+    favoriteMovies.splice(movieIndex, 1);
   }
+
+  localStorage.setItem("favoriteMovies", JSON.stringify(favoriteMovies));
+  showMovies({ films: favoriteMovies });
+  return favoriteMovies;
+};
+
+function removeFavorite(kinopoiskId) {
+  const favoriteMovies =
+    JSON.parse(localStorage.getItem("favoriteMovies")) || [];
+  const updatedFavorites = favoriteMovies.filter(
+    (movie) => movie.kinopoiskId !== kinopoiskId
+  );
+  localStorage.setItem("favoriteMovies", JSON.stringify(updatedFavorites));
+  showMovies({ items: updatedFavorites });
+
+  return updatedFavorites;
 }
 
-const favoritesButton = document.getElementById("favoritesButton");
-function addToFavorites(movie) {
-  let favorites = JSON.parse(localStorage.getItem("favorites"));
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  alert("Movie added to favorites");
-  if (favorites) {
-    addToLocalStorage(favorites);
-  } else {
-    addToLocalStorage([]);
-  }
-}
-
-function addToLocalStorage(favorites, id) {
-  //favorite = document.getElementById(id);
-  if (favorites.includes(id)) {
-    favorites.splice(favorites.indexOf(id), 1);
-    //
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-    console.log(first);
-  } else {
-    favorites.push(id);
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-  }
-}
+///////////////////////////////////////////////////////////////

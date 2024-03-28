@@ -119,3 +119,11 @@ header {
   border: 2px solid red;
 }
 /* main end */
+
+.favbtn-red {
+  background-color: red;
+}
+
+.favbtn-green {
+  background-color: green;
+}
