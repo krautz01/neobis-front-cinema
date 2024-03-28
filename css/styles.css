@@ -3,6 +3,7 @@ body {
   color: #fff;
   font-family: "Open Sans ", sans-serif;
   font-size: 1rem;
+  line-height: 1rem;
   line-height: 0.8rem;
   margin: 0;
   padding: 0;
@@ -62,7 +63,6 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #15183a;
   border-radius: 0.5rem;
   position: relative;
 }
@@ -71,14 +71,12 @@ header {
   width: 16rem;
   height: 24rem;
   margin-top: 2rem;
+  margin-bottom: 1rem;
   cursor: pointer;
 }
 
-.movie__card__info {
-  width: 16rem;
-}
-
 .movie__title {
+  margin-bottom: 0.5rem;
 }
 
 .movie__category {
@@ -101,6 +99,16 @@ header {
   background-color: #1a191f;
 }
 
+.favorite {
+  width: 2rem;
+  height: 2rem;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" red, "wght" 400, "GRAD" 0, "opsz" 24;
+  background-color: aqua;
+}
+
 .movie__average-green {
   border: 2px solid green;
 }
@@ -111,3 +119,11 @@ header {
   border: 2px solid red;
 }
 /* main end */
+
+.favbtn-red {
+  background-color: red;
+}
+
+.favbtn-green {
+  background-color: green;
+}
