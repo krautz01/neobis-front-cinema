@@ -62,6 +62,7 @@ function showMovies(data) {
     const isFavorite = favoriteMovies.some(
       (favMovie) => favMovie.kinopoiskId === movie.kinopoiskId
     );
+    
     const movieEl = document.createElement("div");
     movieEl.classList.add("movie-card");
     movieEl.innerHTML = `
@@ -130,7 +131,7 @@ function removeFavorite(kinopoiskId) {
     (movie) => movie.kinopoiskId !== kinopoiskId
   );
   localStorage.setItem("favoriteMovies", JSON.stringify(updatedFavorites));
-  showMovies({ items: updatedFavorites });
+  showMovies({ films: updatedFavorites });
 
   return updatedFavorites;
 }

@@ -81,11 +81,12 @@ header {
 
 .movie__category {
   font-size: 0.875rem;
+  color: #cfbe26;
 }
 
 .movie__average {
   position: absolute;
-  top: 0.6rem;
+  top: 1.6rem;
   left: 0.6rem;
   right: 0;
   border-radius: 50%;
@@ -120,10 +121,24 @@ header {
 }
 /* main end */
 
-.favbtn-red {
-  background-color: red;
+.favorite__heart-white {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  fill: rgb(255, 255, 255);
 }
 
-.favbtn-green {
-  background-color: green;
+.favorite__heart-red {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  fill: red;
+}
+
+@media screen and (max-width: 768px) {
+  .header__nav {
+    flex-direction: column;
+    height: 10rem;
+  }
+  
 }
